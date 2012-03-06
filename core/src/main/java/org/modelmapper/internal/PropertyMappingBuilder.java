@@ -83,9 +83,9 @@ class PropertyMappingBuilder<S, D> {
       Mutator mutator = entry.getValue();
       propertyNameInfo.pushDestination(entry.getKey(), entry.getValue());
 
-    // Skip explicit mappings or skipped mappings
+    // Skip explicit mappings 
       String _mpath=Strings.join(propertyNameInfo.destinationProperties);
-      if (!typeMap.isMapped(_mpath) /* || typeMap.isSkipped(_mpath)  */ ) {
+      if (!typeMap.isMapped(_mpath) ) {
         matchSource(sourceTypeInfo, mutator);
         propertyNameInfo.clearSource();
         sourceTypes.clear();
