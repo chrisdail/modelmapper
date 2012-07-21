@@ -83,12 +83,14 @@ class PropertyMappingBuilder<S, D> {
       Mutator mutator = entry.getValue();
       propertyNameInfo.pushDestination(entry.getKey(), entry.getValue());
 
-      // Skip explicit mappings
-      if (!typeMap.isMapped(Strings.join(propertyNameInfo.destinationProperties))) {
+    // Skip explicit mappings 
+      String _mpath=Strings.join(propertyNameInfo.destinationProperties);
+      if (!typeMap.isMapped(_mpath) ) {
         matchSource(sourceTypeInfo, mutator);
         propertyNameInfo.clearSource();
         sourceTypes.clear();
       }
+
 
       if (!unverifiedMappings.isEmpty() && mappings.isEmpty())
         mappings.addAll(unverifiedMappings);
@@ -107,12 +109,14 @@ class PropertyMappingBuilder<S, D> {
         mappings.clear();
         unverifiedMappings.clear();
       } else {
-        TypeMap<?, ?> destinationMap = typeMapStore.get(typeMap.getSourceType(), mutator.getType());
-        if (destinationMap == null) {
-          matchDestination(TypeInfoRegistry.typeInfoFor(mutator.getType(), configuration));
-        } else {
-          mergeMappings(destinationMap);
-        }
+          if (!(typeMap.isSkipped(_mpath) && !typeMap.hasCondition(_mpath)) ) {
+              TypeMap<?, ?> destinationMap = typeMapStore.get(typeMap.getSourceType(), mutator.getType());
+              if (destinationMap == null) {
+                  matchDestination(TypeInfoRegistry.typeInfoFor(mutator.getType(), configuration));
+              } else {
+                  mergeMappings(destinationMap);
+              }
+          }
       }
 
       propertyNameInfo.popDestination();

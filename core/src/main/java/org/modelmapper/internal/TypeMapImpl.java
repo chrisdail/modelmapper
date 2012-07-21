@@ -187,4 +187,12 @@ class TypeMapImpl<S, D> implements TypeMap<S, D> {
   boolean isMapped(String path) {
     return mappedProperties.containsKey(path);
   }
+  
+  boolean isSkipped(String path){
+      return  isMapped(path) &&  mappings.get(path) !=null && mappings.get(path).isSkipped();
+  }
+  
+  boolean hasCondition(String path){
+      return isMapped(path) && mappings.get(path) !=null && mappings.get(path).getCondition()!=null;
+  }
 }
